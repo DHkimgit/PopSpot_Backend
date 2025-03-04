@@ -1,5 +1,7 @@
 package io.devtab.popspot.domain.account.model;
 
+import static lombok.AccessLevel.PROTECTED;
+
 import java.time.LocalDateTime;
 
 import io.devtab.popspot.domain.account.model.enums.DeletionStatus;
@@ -14,9 +16,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "user_deletions")
+@NoArgsConstructor(access = PROTECTED)
 public class UserDeletion extends BaseEntity {
 
     @Id
