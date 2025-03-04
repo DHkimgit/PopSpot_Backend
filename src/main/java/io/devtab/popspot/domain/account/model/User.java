@@ -1,24 +1,33 @@
 package io.devtab.popspot.domain.account.model;
 
+import static lombok.AccessLevel.PROTECTED;
+
 import java.time.LocalDateTime;
 
+import io.devtab.popspot.domain.account.model.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @Table(name = "users")
+@NoArgsConstructor(access = PROTECTED)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, updatable = false)
-    private Long id;
+    private Integer id;
 
     @Column(name = "password", nullable = false, columnDefinition = "TEXT")
     private String password;
@@ -35,8 +44,9 @@ public class User {
     @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "user_type", nullable = false, length = 255)
-    private String userType;
+    private UserType userType;
 
     @Column(name = "gender", length = 6)
     private String gender;
