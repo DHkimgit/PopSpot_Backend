@@ -1,11 +1,11 @@
-package io.devtab.popspot.domain.account.api;
+package io.devtab.popspot.domain.user.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import io.devtab.popspot.domain.account.dto.SignInRequest;
-import io.devtab.popspot.domain.account.dto.SignUpRequest;
+import io.devtab.popspot.domain.user.dto.SignInRequest;
+import io.devtab.popspot.domain.user.dto.SignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;

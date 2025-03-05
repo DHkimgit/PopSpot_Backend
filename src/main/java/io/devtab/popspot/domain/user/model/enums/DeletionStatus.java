@@ -1,4 +1,4 @@
-package io.devtab.popspot.domain.account.model.enums;
+package io.devtab.popspot.domain.user.model.enums;
 
 public enum DeletionStatus {
     PENDING, COMPLETED

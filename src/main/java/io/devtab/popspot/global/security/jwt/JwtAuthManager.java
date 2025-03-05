@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import io.devtab.popspot.domain.account.model.User;
+import io.devtab.popspot.domain.user.model.User;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenClaim;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenStrategy;
 import io.devtab.popspot.global.security.jwt.dto.JwtTokens;

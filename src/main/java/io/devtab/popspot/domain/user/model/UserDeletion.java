@@ -1,10 +1,10 @@
-package io.devtab.popspot.domain.account.model;
+package io.devtab.popspot.domain.user.model;
 
 import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
 
-import io.devtab.popspot.domain.account.model.enums.DeletionStatus;
+import io.devtab.popspot.domain.user.model.enums.DeletionStatus;
 import io.devtab.popspot.global.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
