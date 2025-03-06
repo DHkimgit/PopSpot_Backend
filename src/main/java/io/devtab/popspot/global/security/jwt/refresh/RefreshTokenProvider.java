@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import io.devtab.popspot.global.security.jwt.JwtProvider;
 import io.devtab.popspot.global.security.jwt.error.JwtErrorCode;
 import io.devtab.popspot.global.security.jwt.error.JwtErrorCodeUtil;
+import io.devtab.popspot.global.security.jwt.exception.JwtErrorException;
 import io.devtab.popspot.global.security.jwt.model.JwtClaims;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -58,7 +59,7 @@ public class RefreshTokenProvider implements JwtProvider {
     public JwtClaims getJwtClaimsFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
         return RefreshTokenClaim.of(
-            Long.parseLong(claims.get(USER_ID.getValue(), String.class)),
+            Integer.parseInt(claims.get(USER_ID.getValue(), String.class)),
             claims.get(ROLE.getValue(), String.class)
         );
     }

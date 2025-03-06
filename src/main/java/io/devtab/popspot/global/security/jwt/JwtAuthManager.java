@@ -9,7 +9,6 @@ import io.devtab.popspot.domain.user.model.User;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenClaim;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenStrategy;
 import io.devtab.popspot.global.security.jwt.dto.JwtTokens;
-import io.devtab.popspot.global.security.jwt.dto.TokenRefreshResponse;
 import io.devtab.popspot.global.security.jwt.error.JwtErrorCode;
 import io.devtab.popspot.global.security.jwt.exception.JwtErrorException;
 import io.devtab.popspot.global.security.jwt.forbidden.ForbiddenTokenService;
@@ -45,10 +44,10 @@ public class JwtAuthManager {
         String refreshToken = refreshTokenProvider.generateToken(RefreshTokenClaim.of(user.getId(), user.getUserType().name()));
 
         refreshTokenService.save(RefreshTokenEntity.of(user.getId(), refreshToken, toSeconds(refreshTokenProvider.getExpiryDate(refreshToken))));
-        return JwtTokens.of(accessToken, refreshToken);
+        return JwtTokens.of(accessToken, refreshToken, user.getId());
     }
 
-    public TokenRefreshResponse refresh(String refreshToken) {
+    public JwtTokens refresh(String refreshToken) {
         JwtClaims claims = refreshTokenProvider.getJwtClaimsFromToken(refreshToken);
 
         Integer userId = JwtClaimsParserUtil.getClaimsValue(claims, RefreshTokenClaimKeys.USER_ID.getValue(), Integer::parseInt);
@@ -65,7 +64,7 @@ public class JwtAuthManager {
 
         String newAccessToken = accessTokenProvider.generateToken(AccessTokenClaim.of(userId, role));
 
-        return TokenRefreshResponse.of(JwtTokens.of(newAccessToken, newRefreshToken.getToken()), userId);
+        return JwtTokens.of(newAccessToken, newRefreshToken.getToken(), userId);
     }
 
     public void removeAccessTokenAndRefreshToken(Integer userId, String accessToken, String refreshToken) {

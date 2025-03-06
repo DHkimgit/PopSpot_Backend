@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import io.devtab.popspot.domain.user.dto.SignUpRequest;
 import io.devtab.popspot.domain.user.exception.AuthErrorException;
 import io.devtab.popspot.domain.user.exception.UserErrorCode;
 import io.devtab.popspot.domain.user.model.User;
+import io.devtab.popspot.domain.user.service.implement.UserAppender;
 import io.devtab.popspot.domain.user.service.implement.UserGetter;
 import io.devtab.popspot.global.annotation.Business;
 import io.devtab.popspot.global.security.jwt.JwtAuthManager;
@@ -20,6 +22,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthManager jwtAuthManager;
     private final UserGetter userGetter;
+    private final UserAppender userAppender;
 
     public JwtTokens signIn(String email, String password) {
         Optional<User> user = userGetter.readByEmail(email);
@@ -35,11 +38,16 @@ public class AuthService {
         return jwtAuthManager.createToken(user.get());
     }
 
+    public JwtTokens signUpUser(SignUpRequest.Info request) {
+        User user = userAppender.createUser(request.toEntity(passwordEncoder));
+        return jwtAuthManager.createToken(user);
+    }
+
     private boolean isExistUser(Optional<User> user) {
         return user.isPresent();
     }
 
     private boolean isValidPassword(User user, String password) {
-        return passwordEncoder.matches(password, user.getPassword())
+        return passwordEncoder.matches(password, user.getPassword());
     }
 }

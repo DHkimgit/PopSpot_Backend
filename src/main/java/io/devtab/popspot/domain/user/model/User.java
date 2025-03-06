@@ -4,6 +4,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
 
+import io.devtab.popspot.domain.user.model.enums.UserGender;
 import io.devtab.popspot.domain.user.model.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -48,8 +50,9 @@ public class User {
     @Column(name = "user_type", nullable = false, length = 255)
     private UserType userType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", length = 6)
-    private String gender;
+    private UserGender gender;
 
     @Column(name = "marketing_agree", columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean marketingAgree;
@@ -65,6 +68,21 @@ public class User {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Builder
+    public User(String password, String name, String nickname, String phoneNumber, String email, UserType userType,
+        UserGender gender, Boolean marketingAgree, Boolean isDeleted, LocalDateTime lastLoggedAt) {
+        this.password = password;
+        this.name = name;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.userType = userType;
+        this.gender = gender;
+        this.marketingAgree = marketingAgree;
+        this.isDeleted = isDeleted;
+        this.lastLoggedAt = lastLoggedAt;
+    }
 
     @PrePersist
     protected void onCreate() {

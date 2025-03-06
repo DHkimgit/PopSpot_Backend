@@ -34,7 +34,7 @@ public interface AuthApi {
                             }
                             """)
         }))
-    ResponseEntity<?> signUp(@RequestBody @Validated SignUpRequest request);
+    ResponseEntity<?> signUp(@RequestBody @Validated SignUpRequest.TypeUser request);
 
     @Operation(summary = "로그인", description = "아이디와 비밀번호로 로그인합니다.")
     @ApiResponses({

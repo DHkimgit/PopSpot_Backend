@@ -23,7 +23,7 @@ public final class SecurityUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Long userId;
+    private Integer userId;
     private String username;
     private Collection<? extends GrantedAuthority> authorities;
     private boolean accountNonLocked;
@@ -37,7 +37,7 @@ public final class SecurityUserDetails implements UserDetails {
     private boolean accountNonExpired;
 
     @Builder
-    private SecurityUserDetails(Long userId, String username, Collection<? extends GrantedAuthority> authorities, boolean accountNonLocked) {
+    private SecurityUserDetails(Integer userId, String username, Collection<? extends GrantedAuthority> authorities, boolean accountNonLocked) {
         this.userId = userId;
         this.username = username;
         this.authorities = authorities;

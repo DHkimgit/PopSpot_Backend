@@ -28,9 +28,9 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @AccessTokenStrategy
-@Component
 @Slf4j
 @Primary
+@Component
 public class AccessTokenProvider implements JwtProvider {
 
     private final SecretKey secretKey;

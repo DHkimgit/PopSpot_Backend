@@ -14,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import io.devtab.popspot.global.security.jwt.JwtProvider;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenClaimKeys;
 import io.devtab.popspot.global.security.jwt.error.JwtErrorCode;
+import io.devtab.popspot.global.security.jwt.exception.JwtErrorException;
 import io.devtab.popspot.global.security.jwt.forbidden.ForbiddenTokenService;
 import io.devtab.popspot.global.security.jwt.model.JwtClaims;
 import jakarta.servlet.FilterChain;
