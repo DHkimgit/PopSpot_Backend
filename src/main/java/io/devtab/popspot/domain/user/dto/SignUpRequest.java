@@ -30,6 +30,7 @@ public class SignUpRequest {
                 .marketingAgree(marketingAgree)
                 .userType(UserType.USER)
                 .lastLoggedAt(LocalDateTime.now())
+                .passwordUpdateAt(LocalDateTime.now())
                 .build();
         }
     }

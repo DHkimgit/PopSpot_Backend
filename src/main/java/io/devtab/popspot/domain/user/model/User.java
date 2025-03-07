@@ -4,8 +4,11 @@ import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
 
+import org.springframework.util.StringUtils;
+
 import io.devtab.popspot.domain.user.model.enums.UserGender;
 import io.devtab.popspot.domain.user.model.enums.UserType;
+import io.netty.util.internal.StringUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -69,9 +72,12 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(name = "password_update_at", nullable = false)
+    private LocalDateTime passwordUpdateAt;
+
     @Builder
     public User(String password, String name, String nickname, String phoneNumber, String email, UserType userType,
-        UserGender gender, Boolean marketingAgree, Boolean isDeleted, LocalDateTime lastLoggedAt) {
+        UserGender gender, Boolean marketingAgree, Boolean isDeleted, LocalDateTime lastLoggedAt, LocalDateTime passwordUpdateAt) {
         this.password = password;
         this.name = name;
         this.nickname = nickname;
@@ -82,6 +88,16 @@ public class User {
         this.marketingAgree = marketingAgree;
         this.isDeleted = isDeleted;
         this.lastLoggedAt = lastLoggedAt;
+        this.passwordUpdateAt = passwordUpdateAt;
+    }
+
+    public void updatePassword(String newPassword) {
+        if(!StringUtils.hasText(newPassword)) {
+            throw new IllegalArgumentException("password는 null이거나 빈 문자열이 될 수 없습니다.");
+        }
+
+        this.password = newPassword;
+        this.passwordUpdateAt = LocalDateTime.now();
     }
 
     @PrePersist
