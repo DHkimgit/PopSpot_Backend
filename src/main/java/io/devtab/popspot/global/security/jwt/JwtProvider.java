@@ -10,11 +10,18 @@ import io.jsonwebtoken.Claims;
 public interface JwtProvider {
 
     default String resolveToken(String authHeader) {
-        if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
-            return authHeader.substring("Bearer ".length());
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Authorization header");
         }
-        return "";
+        return authHeader.substring("Bearer ".length()); // "Bearer " 이후의 토큰 반환
     }
+
+    // default String resolveToken(String authHeader) {
+    //     if (StringUtils.hasText(authHeader) && authHeader.startsWith("Bearer ")) {
+    //         return authHeader.substring("Bearer ".length());
+    //     }
+    //     return "";
+    // }
 
     String generateToken(JwtClaims subs);
 

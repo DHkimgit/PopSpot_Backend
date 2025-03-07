@@ -45,30 +45,90 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String accessToken = resolveAccessToken(request, response);
+        if (accessToken == null) {
+            return; // 응답이 이미 설정되었으므로 필터 체인을 진행하지 않음
+        }
+
         UserDetails userDetails = getUserDetails(accessToken);
         authenticateUser(userDetails, request);
         filterChain.doFilter(request, response);
     }
+    // @Override
+    // protected void doFilterInternal(
+    //     @NonNull HttpServletRequest request,
+    //     @NonNull HttpServletResponse response,
+    //     @NonNull FilterChain filterChain
+    // ) throws ServletException, IOException {
+    //     if (isAnonymousRequest(request)) {
+    //         filterChain.doFilter(request, response);
+    //         return;
+    //     }
+    //
+    //     String accessToken = resolveAccessToken(request, response);
+    //     UserDetails userDetails = getUserDetails(accessToken);
+    //     authenticateUser(userDetails, request);
+    //     filterChain.doFilter(request, response);
+    // }
 
-    private String resolveAccessToken(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    private String resolveAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        String token = accessTokenProvider.resolveToken(authHeader);
+        String token = null;
+        try {
+            token = accessTokenProvider.resolveToken(authHeader);
+            log.debug("요청 토큰 : {}", token);
+        } catch (Exception e) {
+            log.error("토큰 파싱 중 오류 발생: {}", e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Invalid token format\"}");
+            return null;
+        }
 
         if (!StringUtils.hasText(token)) {
-            handleAuthException(JwtErrorCode.EMPTY_ACCESS_TOKEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Empty access token\"}");
+            return null;
         }
 
         if (forbiddenTokenService.checkForbidden(token)) {
-            handleAuthException(JwtErrorCode.FORBIDDEN_ACCESS_TOKEN);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Forbidden access token\"}");
+            return null;
         }
 
         if (accessTokenProvider.isTokenExpired(token)) {
-            handleAuthException(JwtErrorCode.EXPIRED_TOKEN);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Expired token\"}");
+            return null;
         }
 
         return token;
     }
+
+    // private String resolveAccessToken(HttpServletRequest request, HttpServletResponse response) throws ServletException {
+    //     String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    //
+    //     String token = accessTokenProvider.resolveToken(authHeader);
+    //     log.debug("요청 토큰 : {}", token);
+    //
+    //     if (!StringUtils.hasText(token)) {
+    //         handleAuthException(JwtErrorCode.EMPTY_ACCESS_TOKEN);
+    //     }
+    //
+    //     if (forbiddenTokenService.checkForbidden(token)) {
+    //         handleAuthException(JwtErrorCode.FORBIDDEN_ACCESS_TOKEN);
+    //     }
+    //
+    //     if (accessTokenProvider.isTokenExpired(token)) {
+    //         handleAuthException(JwtErrorCode.EXPIRED_TOKEN);
+    //     }
+    //
+    //     return token;
+    // }
 
     // AccessToken과 RefreshToken이 모두 없는 경우, 익명 사용자로 간주
     private boolean isAnonymousRequest(HttpServletRequest request) {

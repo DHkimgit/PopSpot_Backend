@@ -17,4 +17,7 @@ public class UserGetter {
         return userRepository.findActiveUserByEmail(email);
     }
 
+    public User read(Integer userId) {
+        return userRepository.getById(userId);
+    }
 }
