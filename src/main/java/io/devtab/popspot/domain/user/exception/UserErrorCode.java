@@ -14,6 +14,7 @@ public enum UserErrorCode implements BaseErrorCode {
     /* 400 BAD_REQUEST */
     NOT_MATCHED_PASSWORD(BAD_REQUEST, ReasonCode.INVALID_REQUEST, "비밀번호가 일치하지 않습니다."),
     IS_SAME_PASSWORD(BAD_REQUEST, ReasonCode.INVALID_REQUEST, "동일한 비밀번호로 변경할 수 없습니다."),
+    IS_FORMER_PASSWORD(BAD_REQUEST, ReasonCode.INVALID_REQUEST, "과거에 사용했던 비밀번호로 변경할 수 없습니다."),
 
     /* 401 UNAUTHORIZED */
     INVALID_USERNAME_OR_PASSWORD(UNAUTHORIZED, ReasonCode.MISSING_OR_INVALID_AUTHENTICATION_CREDENTIALS, "아이디 혹은 비밀번호가 적합하지 않습니다."),

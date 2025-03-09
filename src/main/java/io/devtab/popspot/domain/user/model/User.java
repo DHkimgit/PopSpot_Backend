@@ -1,14 +1,16 @@
 package io.devtab.popspot.domain.user.model;
 
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.*;
 import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
+import io.devtab.popspot.domain.user.exception.UserErrorException;
 import io.devtab.popspot.domain.user.model.enums.UserGender;
 import io.devtab.popspot.domain.user.model.enums.UserType;
-import io.netty.util.internal.StringUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -91,13 +93,30 @@ public class User {
         this.passwordUpdateAt = passwordUpdateAt;
     }
 
-    public void updatePassword(String newPassword) {
+    public void updatePassword(String currentPassword, String newPassword, PasswordEncoder passwordEncoder) {
+        validatePasswordNotEmpty(newPassword);
+        validateCurrentPassword(currentPassword, passwordEncoder);
+        validateNewPasswordDiffersFromCurrent(newPassword, passwordEncoder);
+        this.password = newPassword;
+        this.passwordUpdateAt = LocalDateTime.now();
+    }
+
+    private void validatePasswordNotEmpty(String newPassword) {
         if(!StringUtils.hasText(newPassword)) {
             throw new IllegalArgumentException("password는 null이거나 빈 문자열이 될 수 없습니다.");
         }
+    }
 
-        this.password = newPassword;
-        this.passwordUpdateAt = LocalDateTime.now();
+    private void validateCurrentPassword(String currentPassword, PasswordEncoder passwordEncoder) {
+        if(!passwordEncoder.matches(this.password, currentPassword)) {
+            throw new UserErrorException(NOT_MATCHED_PASSWORD);
+        }
+    }
+
+    public void validateNewPasswordDiffersFromCurrent(String newPassword, PasswordEncoder passwordEncoder) {
+        if(passwordEncoder.matches(this.password, newPassword)) {
+            throw new UserErrorException(IS_SAME_PASSWORD);
+        }
     }
 
     @PrePersist
