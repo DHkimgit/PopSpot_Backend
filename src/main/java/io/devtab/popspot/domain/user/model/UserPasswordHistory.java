@@ -1,6 +1,7 @@
 package io.devtab.popspot.domain.user.model;
 
-import static io.devtab.popspot.domain.user.exception.UserErrorCode.*;
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.IS_FORMER_PASSWORD;
+import static lombok.AccessLevel.PROTECTED;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,11 +15,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "user_password_history")
+@EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor(access = PROTECTED)
 public class UserPasswordHistory extends BaseEntity {
 
     @Id
@@ -37,5 +43,19 @@ public class UserPasswordHistory extends BaseEntity {
         if(passwordEncoder.matches(this.password, newPassword)) {
             throw new UserErrorException(IS_FORMER_PASSWORD);
         }
+    }
+
+    @Builder
+    public UserPasswordHistory(Integer id, User user, String password) {
+        this.id = id;
+        this.user = user;
+        this.password = password;
+    }
+
+    public static UserPasswordHistory of(User user, String password) {
+        return UserPasswordHistory.builder()
+            .user(user)
+            .password(password)
+            .build();
     }
 }

@@ -25,9 +25,7 @@ public class UserAccountController implements UserAccountApi {
     @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> changePassword(UserUpdateDto.PasswordRequest request, SecurityUserDetails userDetails) {
-        log.debug("히히");
         userAccountService.updatePassword(userDetails.getUserId(), request.oldPassword(), request.newPassword());
-        log.debug("헤헤");
         return ResponseEntity.ok(SuccessResponse.noContent());
     }
 }
