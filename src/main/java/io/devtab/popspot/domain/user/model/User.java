@@ -1,7 +1,6 @@
 package io.devtab.popspot.domain.user.model;
 
-import static io.devtab.popspot.domain.user.exception.UserErrorCode.IS_SAME_PASSWORD;
-import static io.devtab.popspot.domain.user.exception.UserErrorCode.NOT_MATCHED_PASSWORD;
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.*;
 import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
@@ -96,9 +95,12 @@ public class User {
     }
 
     public UserPasswordHistory updatePassword(String currentPassword, String newPassword,
-        PasswordEncoder passwordEncoder) {
+        PasswordEncoder passwordEncoder, UserPasswordHistory latestHistory) {
         validatePasswordNotEmpty(newPassword);
         validateCurrentPassword(currentPassword, passwordEncoder);
+        if (latestHistory != null) {
+            validateNewPasswordDiffersFromHistory(newPassword, latestHistory, passwordEncoder);
+        }
         validateNewPasswordDiffersFromCurrent(newPassword, passwordEncoder);
 
         String oldPassword = this.password;
@@ -123,6 +125,13 @@ public class User {
     public void validateNewPasswordDiffersFromCurrent(String newPassword, PasswordEncoder passwordEncoder) {
         if (passwordEncoder.matches(this.password, newPassword)) {
             throw new UserErrorException(IS_SAME_PASSWORD);
+        }
+    }
+
+    private void validateNewPasswordDiffersFromHistory(String newPassword, UserPasswordHistory latestHistory,
+        PasswordEncoder passwordEncoder) {
+        if (passwordEncoder.matches(newPassword, latestHistory.getPassword())) {
+            throw new UserErrorException(IS_FORMER_PASSWORD);
         }
     }
 

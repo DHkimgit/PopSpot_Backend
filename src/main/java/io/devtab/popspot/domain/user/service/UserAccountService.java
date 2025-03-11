@@ -23,17 +23,9 @@ public class UserAccountService {
     @Transactional
     public void updatePassword(Integer userId, String oldPassword, String newPassword) {
         User user = userGetter.read(userId);
-        UserPasswordHistory userPasswordHistory = user.updatePassword(oldPassword, newPassword, passwordEncoder);
-        passwordHistoryAppender.save(userPasswordHistory);
-    }
-
-    @Transactional(readOnly = true)
-    public void validatePassword(Integer userId, String newPassword) {
-        User user = userGetter.read(userId);
-
-        user.validateNewPasswordDiffersFromCurrent(newPassword, passwordEncoder);
-
-        passwordHistoryGetter.getLatestPasswordHistory(userId)
-            .ifPresent(history -> history.validateNewPasswordDiffersFromHistory(newPassword, passwordEncoder));
+        UserPasswordHistory latestHistory = passwordHistoryGetter.getLatestPasswordHistory(userId).orElse(null);
+        UserPasswordHistory updatedHistory = user.updatePassword(oldPassword, newPassword, passwordEncoder,
+            latestHistory);
+        passwordHistoryAppender.save(updatedHistory);
     }
 }

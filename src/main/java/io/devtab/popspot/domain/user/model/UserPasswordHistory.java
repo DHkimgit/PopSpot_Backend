@@ -1,6 +1,6 @@
 package io.devtab.popspot.domain.user.model;
 
-import static io.devtab.popspot.domain.user.exception.UserErrorCode.*;
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.IS_FORMER_PASSWORD;
 import static lombok.AccessLevel.PROTECTED;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
