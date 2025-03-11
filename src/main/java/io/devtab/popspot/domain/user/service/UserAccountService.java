@@ -23,8 +23,8 @@ public class UserAccountService {
     @Transactional
     public void updatePassword(Integer userId, String oldPassword, String newPassword) {
         User user = userGetter.read(userId);
-        user.updatePassword(oldPassword, newPassword, passwordEncoder);
-        passwordHistoryAppender.save(UserPasswordHistory.of(user, oldPassword));
+        UserPasswordHistory userPasswordHistory = user.updatePassword(oldPassword, newPassword, passwordEncoder);
+        passwordHistoryAppender.save(userPasswordHistory);
     }
 
     @Transactional(readOnly = true)

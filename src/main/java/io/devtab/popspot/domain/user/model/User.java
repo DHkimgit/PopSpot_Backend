@@ -1,6 +1,7 @@
 package io.devtab.popspot.domain.user.model;
 
-import static io.devtab.popspot.domain.user.exception.UserErrorCode.*;
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.IS_SAME_PASSWORD;
+import static io.devtab.popspot.domain.user.exception.UserErrorCode.NOT_MATCHED_PASSWORD;
 import static lombok.AccessLevel.PROTECTED;
 
 import java.time.LocalDateTime;
@@ -79,7 +80,8 @@ public class User {
 
     @Builder
     public User(String password, String name, String nickname, String phoneNumber, String email, UserType userType,
-        UserGender gender, Boolean marketingAgree, Boolean isDeleted, LocalDateTime lastLoggedAt, LocalDateTime passwordUpdateAt) {
+        UserGender gender, Boolean marketingAgree, Boolean isDeleted, LocalDateTime lastLoggedAt,
+        LocalDateTime passwordUpdateAt) {
         this.password = password;
         this.name = name;
         this.nickname = nickname;
@@ -93,28 +95,33 @@ public class User {
         this.passwordUpdateAt = passwordUpdateAt;
     }
 
-    public void updatePassword(String currentPassword, String newPassword, PasswordEncoder passwordEncoder) {
+    public UserPasswordHistory updatePassword(String currentPassword, String newPassword,
+        PasswordEncoder passwordEncoder) {
         validatePasswordNotEmpty(newPassword);
         validateCurrentPassword(currentPassword, passwordEncoder);
         validateNewPasswordDiffersFromCurrent(newPassword, passwordEncoder);
-        this.password = newPassword;
+
+        String oldPassword = this.password;
+        this.password = passwordEncoder.encode(newPassword);
         this.passwordUpdateAt = LocalDateTime.now();
+
+        return UserPasswordHistory.of(this, oldPassword);
     }
 
     private void validatePasswordNotEmpty(String newPassword) {
-        if(!StringUtils.hasText(newPassword)) {
+        if (!StringUtils.hasText(newPassword)) {
             throw new IllegalArgumentException("password는 null이거나 빈 문자열이 될 수 없습니다.");
         }
     }
 
     private void validateCurrentPassword(String currentPassword, PasswordEncoder passwordEncoder) {
-        if(!passwordEncoder.matches(this.password, currentPassword)) {
+        if (!passwordEncoder.matches(this.password, currentPassword)) {
             throw new UserErrorException(NOT_MATCHED_PASSWORD);
         }
     }
 
     public void validateNewPasswordDiffersFromCurrent(String newPassword, PasswordEncoder passwordEncoder) {
-        if(passwordEncoder.matches(this.password, newPassword)) {
+        if (passwordEncoder.matches(this.password, newPassword)) {
             throw new UserErrorException(IS_SAME_PASSWORD);
         }
     }
