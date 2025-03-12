@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: popspot
+
+  config:
+    import:
+      - classpath:application-data.yml
+      - classpath:application-common-web.yml
+
+springdoc:
+  swagger-ui:
+    oauth2-redirect-url: http://localhost:8080/swagger-ui/oauth2-redirect.html
+    operations-sorter: method
+  api-docs:
+    path: /v3/api-docs
+
+swagger:
+  server-url: http://localhost:8080
+
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+        engin:
+          transaction:
+            internal:
+              TransactionImpl: DEBUG
+    root: DEBUG
+    org.springframework.web: TRACE
+    org.springdoc: DEBUG
+
