@@ -17,8 +17,8 @@ pluginManagement {
 rootProject.name = 'popspot'
 
 include(
-        'popspot-core-domain',
         'popspot-core-data',
         'popspot-core-service',
-        'popspot-common-web'
+        'popspot-common-web',
+        'popspot-common-util'
 )
