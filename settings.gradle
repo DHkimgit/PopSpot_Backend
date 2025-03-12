@@ -1,1 +1,24 @@
+pluginManagement {
+    String springBootVersion = settings.springBootVersion
+    String springDependencyManagementVersion = settings.springDependencyManagementVersion
+
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == 'org.springframework.boot') {
+                useVersion(springBootVersion)
+            }
+            if (requested.id.id == 'io.spring.dependency-management') {
+                useVersion(springDependencyManagementVersion)
+            }
+        }
+    }
+}
+
 rootProject.name = 'popspot'
+
+include(
+        'popspot-core-domain',
+        'popspot-core-data',
+        'popspot-core-service',
+        'popspot-common-web'
+)
