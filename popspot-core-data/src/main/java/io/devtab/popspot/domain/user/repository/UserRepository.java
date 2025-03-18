@@ -20,4 +20,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     default User getById(Integer userId) {
         return findById(userId).orElseThrow(() -> new UserErrorException(UserErrorCode.USER_NOT_FOUND));
     }
+
+    Boolean existsUserByNickname(String nickname);
 }
