@@ -7,11 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.web.AbstractRequestMatcherRegistry;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -47,20 +45,15 @@ public class SecurityConfig {
                     .accessDeniedHandler(accessDeniedHandler)
                     .authenticationEntryPoint(authenticationEntryPoint)
             )
-            .authorizeHttpRequests(
-                auth -> defaultAuthorizeHttpRequests(auth)
-                    .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
-                    .anyRequest().authenticated()
-        ).build();
-    }
-
-    private AbstractRequestMatcherRegistry<AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizedUrl> defaultAuthorizeHttpRequests(
-        AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry auth) {
-        return auth.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-            .requestMatchers(HttpMethod.OPTIONS, "*").permitAll()
-            .requestMatchers(HttpMethod.GET, READ_ONLY_PUBLIC_ENDPOINTS).permitAll()
-            .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-            .requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
-            .requestMatchers(ANONYMOUS_ENDPOINTS).anonymous();
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
+                .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers(HttpMethod.GET, READ_ONLY_PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers(ANONYMOUS_ENDPOINTS).anonymous()
+                .requestMatchers(AUTHENTICATED_ENDPOINTS).authenticated()
+                .anyRequest().authenticated()
+            ).build();
     }
 }

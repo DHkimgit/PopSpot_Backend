@@ -22,4 +22,8 @@ public class UserGetter {
     public User read(Integer userId) {
         return userRepository.getById(userId);
     }
+
+    public Boolean existNickname(String nickname) {
+        return userRepository.existsUserByNickname(nickname);
+    }
 }

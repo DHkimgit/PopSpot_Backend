@@ -3,10 +3,13 @@ package io.devtab.popspot.domain.user.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.devtab.popspot.domain.user.api.UserAccountApi;
+import io.devtab.popspot.domain.user.dto.UserAccountValidateDto;
 import io.devtab.popspot.domain.user.dto.UserUpdateDto;
 import io.devtab.popspot.domain.user.service.UserAccountService;
 import io.devtab.popspot.global.response.SuccessResponse;
@@ -21,6 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 public class UserAccountController implements UserAccountApi {
 
     private final UserAccountService userAccountService;
+
+    @GetMapping("/validate/nickname/{value}")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<?> validateNickname(@PathVariable("value") String nickname) {
+        var response = new UserAccountValidateDto.NicknameResponse(
+            userAccountService.validateNickname(nickname));
+        return ResponseEntity.ok(SuccessResponse.from(response));
+    }
 
     @PatchMapping("/password")
     @PreAuthorize("isAuthenticated()")

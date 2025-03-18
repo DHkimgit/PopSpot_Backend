@@ -39,6 +39,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         @NonNull HttpServletResponse response,
         @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
+        if (shouldSkipAuthentication(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         if (isAnonymousRequest(request)) {
             filterChain.doFilter(request, response);
             return;
@@ -133,8 +138,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     // AccessToken과 RefreshToken이 모두 없는 경우, 익명 사용자로 간주
     private boolean isAnonymousRequest(HttpServletRequest request) {
         String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
-
-        return accessToken == null;
+        return !StringUtils.hasText(accessToken);
     }
 
     private void handleAuthException(JwtErrorCode errorCode) throws ServletException {
@@ -164,5 +168,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Authenticated user: {}", userDetails.getUsername());
+    }
+
+    private boolean shouldSkipAuthentication(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        log.debug("Checking path: {}", path);
+        boolean skip = path.startsWith("/user/me") || path.startsWith("/auth/");
+        log.debug("Skip authentication: {}", skip);
+        return skip;
     }
 }

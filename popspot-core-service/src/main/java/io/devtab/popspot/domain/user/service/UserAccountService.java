@@ -28,4 +28,9 @@ public class UserAccountService {
             latestHistory);
         passwordHistoryAppender.save(updatedHistory);
     }
+
+    @Transactional(readOnly = true)
+    public Boolean validateNickname(String nickname) {
+        return userGetter.existNickname(nickname);
+    }
 }
