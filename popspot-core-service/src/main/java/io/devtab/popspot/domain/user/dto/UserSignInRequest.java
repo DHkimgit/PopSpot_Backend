@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
 @Schema(name = "SignInRequest", title = "일반 사용자 로그인 요청 DTO")
-public record SignInRequest(
+public record UserSignInRequest(
     @Schema(description = "아이디(이메일)", example = "qwer001@naver.com")
     @NotBlank(message = "아이디(이메일)을 입력해주세요")
     String email,

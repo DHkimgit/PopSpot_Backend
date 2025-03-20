@@ -4,8 +4,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import io.devtab.popspot.domain.user.dto.SignInRequest;
-import io.devtab.popspot.domain.user.dto.SignUpRequest;
+import io.devtab.popspot.domain.user.dto.UserSignInRequest;
+import io.devtab.popspot.domain.user.dto.UserSignUpRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -34,7 +34,7 @@ public interface AuthApi {
                             }
                             """)
         }))
-    ResponseEntity<?> signUp(@RequestBody @Validated SignUpRequest.TypeUser request);
+    ResponseEntity<?> signUp(@RequestBody @Validated UserSignUpRequest.TypeUser request);
 
     @Operation(summary = "로그인", description = "아이디와 비밀번호로 로그인합니다.")
     @ApiResponses({
@@ -64,5 +64,5 @@ public interface AuthApi {
                             """)
         }))
     })
-    ResponseEntity<?> signIn(@RequestBody @Validated SignInRequest request);
+    ResponseEntity<?> signIn(@RequestBody @Validated UserSignInRequest request);
 }

@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -51,4 +52,16 @@ public class UserDeletion extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 45)
     private DeletionStatus status;
+
+    @Builder
+    public UserDeletion(User user, String reason, LocalDateTime deletedAt, String feedback, String ipAddress,
+        String deviceInfo, DeletionStatus status) {
+        this.user = user;
+        this.reason = reason;
+        this.deletedAt = deletedAt;
+        this.feedback = feedback;
+        this.ipAddress = ipAddress;
+        this.deviceInfo = deviceInfo;
+        this.status = status;
+    }
 }

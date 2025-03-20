@@ -118,13 +118,13 @@ public class User {
     }
 
     private void validateCurrentPassword(String currentPassword, PasswordEncoder passwordEncoder) {
-        if (!passwordEncoder.matches(this.password, currentPassword)) {
+        if (!passwordEncoder.matches(currentPassword, this.password)) {
             throw new UserErrorException(NOT_MATCHED_PASSWORD);
         }
     }
 
     public void validateNewPasswordDiffersFromCurrent(String newPassword, PasswordEncoder passwordEncoder) {
-        if (passwordEncoder.matches(this.password, newPassword)) {
+        if (passwordEncoder.matches(newPassword, this.password)) {
             throw new UserErrorException(IS_SAME_PASSWORD);
         }
     }
@@ -134,6 +134,10 @@ public class User {
         if (passwordEncoder.matches(newPassword, latestHistory.getPassword())) {
             throw new UserErrorException(IS_FORMER_PASSWORD);
         }
+    }
+
+    public void cancelMembership() {
+        this.isDeleted = true;
     }
 
     @PrePersist
