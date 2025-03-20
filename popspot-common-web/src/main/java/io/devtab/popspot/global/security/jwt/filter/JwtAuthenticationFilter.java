@@ -33,47 +33,47 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final ForbiddenTokenService forbiddenTokenService;
     private final JwtProvider accessTokenProvider;
 
-    @Override
-    protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
-        if (shouldSkipAuthentication(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        if (isAnonymousRequest(request)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
-        String accessToken = resolveAccessToken(request, response);
-        if (accessToken == null) {
-            return; // 응답이 이미 설정되었으므로 필터 체인을 진행하지 않음
-        }
-
-        UserDetails userDetails = getUserDetails(accessToken);
-        authenticateUser(userDetails, request);
-        filterChain.doFilter(request, response);
-    }
     // @Override
     // protected void doFilterInternal(
     //     @NonNull HttpServletRequest request,
     //     @NonNull HttpServletResponse response,
     //     @NonNull FilterChain filterChain
     // ) throws ServletException, IOException {
+    //     if (shouldSkipAuthentication(request)) {
+    //         filterChain.doFilter(request, response);
+    //         return;
+    //     }
+    //
     //     if (isAnonymousRequest(request)) {
     //         filterChain.doFilter(request, response);
     //         return;
     //     }
     //
     //     String accessToken = resolveAccessToken(request, response);
+    //     if (accessToken == null) {
+    //         return; // 응답이 이미 설정되었으므로 필터 체인을 진행하지 않음
+    //     }
+    //
     //     UserDetails userDetails = getUserDetails(accessToken);
     //     authenticateUser(userDetails, request);
     //     filterChain.doFilter(request, response);
     // }
+    @Override
+    protected void doFilterInternal(
+        @NonNull HttpServletRequest request,
+        @NonNull HttpServletResponse response,
+        @NonNull FilterChain filterChain
+    ) throws ServletException, IOException {
+        if (isAnonymousRequest(request)) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String accessToken = resolveAccessToken(request, response);
+        UserDetails userDetails = getUserDetails(accessToken);
+        authenticateUser(userDetails, request);
+        filterChain.doFilter(request, response);
+    }
 
     private String resolveAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -168,13 +168,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         log.info("Authenticated user: {}", userDetails.getUsername());
-    }
-
-    private boolean shouldSkipAuthentication(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        log.debug("Checking path: {}", path);
-        boolean skip = path.startsWith("/user/me") || path.startsWith("/auth/");
-        log.debug("Skip authentication: {}", skip);
-        return skip;
     }
 }

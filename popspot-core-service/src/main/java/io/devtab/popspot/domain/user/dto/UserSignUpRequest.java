@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public class SignUpRequest {
+public class UserSignUpRequest {
 
     public record Info(String email, String password, String name, String nickname, String phoneNumber, Boolean marketingAgree, UserGender gender) {
         public String password(PasswordEncoder passwordEncoder) {
