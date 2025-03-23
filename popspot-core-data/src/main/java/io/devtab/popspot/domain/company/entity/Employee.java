@@ -6,6 +6,8 @@ import io.devtab.popspot.domain.user.entity.User;
 import io.devtab.popspot.global.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,4 +41,8 @@ public class Employee extends BaseEntity {
     @SoftDelete
     @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isDeleted;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", length = 50)
+    private EmployeeAuthority authority;
 }
