@@ -16,6 +16,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +36,7 @@ public class Company extends BaseEntity {
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Employee> members = new ArrayList<>();
 
-    @Column(name = "business_registration_number")
+    @Column(name = "business_registration_number", unique = true)
     private String businessRegistrationNumber;
 
     @Column(name = "contact_phone")
@@ -47,4 +48,14 @@ public class Company extends BaseEntity {
     @SoftDelete
     @Column(name = "is_deleted", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
     private Boolean isDeleted;
+
+    @Builder
+    public Company(String name, String businessRegistrationNumber, String contactPhone, String contactEmail,
+        Boolean isDeleted) {
+        this.name = name;
+        this.businessRegistrationNumber = businessRegistrationNumber;
+        this.contactPhone = contactPhone;
+        this.contactEmail = contactEmail;
+        this.isDeleted = isDeleted;
+    }
 }
