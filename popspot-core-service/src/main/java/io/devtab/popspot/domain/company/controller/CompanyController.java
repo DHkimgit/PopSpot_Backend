@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import io.devtab.popspot.domain.company.api.CompanyApi;
 import io.devtab.popspot.domain.company.dto.CompanyRequest;
+import io.devtab.popspot.domain.company.dto.CompanyResponse;
 import io.devtab.popspot.domain.company.service.CompanyService;
 import io.devtab.popspot.global.response.SuccessResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +28,8 @@ public class CompanyController implements CompanyApi {
     @PostMapping("/register")
     @PreAuthorize("permitAll() or isAnonymous()")
     public ResponseEntity<?> register(CompanyRequest.Register request) {
-        companyService.registerCompany(request.toCommand());
-        return ResponseEntity.ok(SuccessResponse.noContent());
+        String inviteCode = companyService.registerCompany(request.toCommand());
+        return ResponseEntity.ok(SuccessResponse.from(CompanyResponse.register.of(inviteCode)));
     }
 
     @GetMapping("/check/business-number/{value}")

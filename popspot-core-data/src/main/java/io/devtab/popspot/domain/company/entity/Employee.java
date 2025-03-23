@@ -43,6 +43,6 @@ public class Employee extends BaseEntity {
     private Boolean isDeleted;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", length = 50)
+    @Column(name = "authority", length = 50)
     private EmployeeAuthority authority;
 }

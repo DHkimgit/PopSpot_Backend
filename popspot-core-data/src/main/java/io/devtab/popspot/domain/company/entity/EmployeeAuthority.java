@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum EmployeeAuthority {
-    ADMIN("어드민"), MANAGER("매니저"), STAFF("직원");
+    HOST_ADMIN("어드민"), HOST_MANAGER("매니저"), HOST_STAFF("직원");
 
     private final String name;
 

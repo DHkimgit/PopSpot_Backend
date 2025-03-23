@@ -24,16 +24,10 @@ public interface CompanyApi {
                 {
                     "code": "201",
                     "data": {
-                        "company": {
-                            "id": 1,
-                            "name": "POPSPOT",
-                            "businessRegistrationNumber": "123-45-67890",
-                            "contactPhone": "02-123-4567",
-                            "contactEmail": "company@example.com"
-                        }
-                    }
+                        "CompanyAccountInviteCode": "CP-EIN7F6"
+                      }
                 }
-                """)
+                """, description = "회사 계정 권한을 부여 할 수 있는 코드 반환")
         }))
     @ApiResponse(responseCode = "400", description = "잘못된 요청",
         content = @Content(mediaType = "application/json", examples = {
