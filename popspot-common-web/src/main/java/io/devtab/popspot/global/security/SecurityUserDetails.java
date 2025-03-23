@@ -48,7 +48,7 @@ public final class SecurityUserDetails implements UserDetails {
         return builder()
             .userId(user.getId())
             .username(user.getEmail())
-            .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + user.getUserType().name())))
+            .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + user.getUserType().getAuthority())))
             .accountNonLocked(user.getIsDeleted())
             .build();
     }

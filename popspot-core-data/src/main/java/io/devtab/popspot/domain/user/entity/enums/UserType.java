@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum UserType {
-    USER(Authority.USER), PARTNER(Authority.HOST), ADMIN(Authority.ADMIN);
+    USER(Authority.USER), HOST(Authority.HOST), ADMIN(Authority.ADMIN);
 
     private final String authority;
 
