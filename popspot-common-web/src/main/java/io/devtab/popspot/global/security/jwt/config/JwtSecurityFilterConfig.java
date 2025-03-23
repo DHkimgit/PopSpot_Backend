@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.devtab.popspot.domain.jwt.forbidden.ForbiddenTokenService;
+import io.devtab.popspot.global.jwt.forbidden.ForbiddenTokenService;
 import io.devtab.popspot.global.security.jwt.filter.JwtAuthenticationFilter;
 import io.devtab.popspot.global.security.jwt.filter.JwtExceptionFilter;
 import io.devtab.popspot.global.security.jwt.JwtProvider;

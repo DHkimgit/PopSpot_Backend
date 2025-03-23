@@ -1,4 +1,4 @@
-package io.devtab.popspot.domain.jwt.forbidden;
+package io.devtab.popspot.global.jwt.forbidden;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;

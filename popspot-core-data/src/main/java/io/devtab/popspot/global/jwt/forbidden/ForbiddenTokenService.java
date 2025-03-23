@@ -1,4 +1,4 @@
-package io.devtab.popspot.domain.jwt.forbidden;
+package io.devtab.popspot.global.jwt.forbidden;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
