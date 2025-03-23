@@ -28,6 +28,7 @@ logging:
           transaction:
             internal:
               TransactionImpl: DEBUG
+    org.springframework.security: TRACE
     root: DEBUG
     org.springframework.web: TRACE
     org.springdoc: DEBUG

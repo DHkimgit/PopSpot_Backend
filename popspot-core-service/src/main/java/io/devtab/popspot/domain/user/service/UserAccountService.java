@@ -8,7 +8,7 @@ import io.devtab.popspot.domain.user.entity.User;
 import io.devtab.popspot.domain.user.entity.UserPasswordHistory;
 import io.devtab.popspot.domain.user.service.implement.PasswordHistoryAppender;
 import io.devtab.popspot.domain.user.service.implement.PasswordHistoryGetter;
-import io.devtab.popspot.domain.user.service.implement.UserGetter;
+import io.devtab.popspot.domain.user.service.implement.UserReader;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -16,13 +16,13 @@ import lombok.RequiredArgsConstructor;
 public class UserAccountService {
 
     private final PasswordEncoder passwordEncoder;
-    private final UserGetter userGetter;
+    private final UserReader userReader;
     private final PasswordHistoryGetter passwordHistoryGetter;
     private final PasswordHistoryAppender passwordHistoryAppender;
 
     @Transactional
     public void updatePassword(Integer userId, String oldPassword, String newPassword) {
-        User user = userGetter.read(userId);
+        User user = userReader.read(userId);
         UserPasswordHistory latestHistory = passwordHistoryGetter.getLatestPasswordHistory(userId).orElse(null);
         UserPasswordHistory updatedHistory = user.updatePassword(oldPassword, newPassword, passwordEncoder,
             latestHistory);
@@ -31,6 +31,6 @@ public class UserAccountService {
 
     @Transactional(readOnly = true)
     public Boolean validateNickname(String nickname) {
-        return userGetter.existNickname(nickname);
+        return userReader.existNickname(nickname);
     }
 }

@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import io.devtab.popspot.domain.user.api.AuthApi;
-import io.devtab.popspot.domain.user.dto.SignInRequest;
-import io.devtab.popspot.domain.user.dto.SignUpRequest;
+import io.devtab.popspot.domain.user.dto.UserSignInRequest;
+import io.devtab.popspot.domain.user.dto.UserSignUpRequest;
 import io.devtab.popspot.domain.user.service.AuthService;
 import io.devtab.popspot.global.response.SuccessResponse;
 import io.devtab.popspot.global.security.jwt.dto.JwtTokens;
@@ -30,13 +30,13 @@ public class AuthController implements AuthApi {
 
     @PostMapping("/sign-up")
     @PreAuthorize("isAnonymous()")
-    public ResponseEntity<?> signUp(SignUpRequest.TypeUser request) {
+    public ResponseEntity<?> signUp(UserSignUpRequest.TypeUser request) {
         return createAuthenticatedResponse(authService.signUpUser(request.toInfo()));
     }
 
     @PostMapping("/sign-in")
     @PreAuthorize("isAnonymous()")
-    public ResponseEntity<?> signIn(SignInRequest request) {
+    public ResponseEntity<?> signIn(UserSignInRequest request) {
         return createAuthenticatedResponse(authService.signIn(request.email(), request.password()));
     }
 

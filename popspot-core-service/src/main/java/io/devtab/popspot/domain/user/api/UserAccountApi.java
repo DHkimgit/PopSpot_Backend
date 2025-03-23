@@ -6,8 +6,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.devtab.popspot.domain.user.dto.UserDeleteRequest;
 import io.devtab.popspot.domain.user.dto.UserUpdateDto;
 import io.devtab.popspot.global.security.SecurityUserDetails;
+import io.devtab.popspot.global.web.ipaddress.IpAddress;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -49,5 +51,18 @@ public interface UserAccountApi {
         })),
     })
     ResponseEntity<?> validateNickname(@RequestParam("nickname") String nickname);
+
+    @Operation(summary = "사용자 탈퇴")
+    @ApiResponses({
+        @ApiResponse(responseCode = "400", content = @Content(mediaType = "application/json", examples = {
+            @ExampleObject(name = "DTO 항목 누락", value = """
+                            {
+                                "code": "400",
+                                "message": "탈퇴 사유를 입력해주세요."
+                            }
+                            """)
+        })),
+    })
+    ResponseEntity<?> deleteUser(@RequestBody @Validated UserDeleteRequest request, @AuthenticationPrincipal SecurityUserDetails userDetails, @IpAddress String ipAddress);
 
 }

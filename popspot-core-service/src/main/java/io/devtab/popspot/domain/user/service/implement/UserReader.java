@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class UserGetter {
+public class UserReader {
 
     private final UserRepository userRepository;
 
