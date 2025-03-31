@@ -11,7 +11,7 @@ public class UserAccountValidateDto {
     @Schema(title = "닉네임 중복 검사 응답 DTO")
     @JsonNaming(value = SnakeCaseStrategy.class)
     public record NicknameResponse(
-        @Schema(description = "변경할 닉네임을 입력하세요", example = "홍길동")
+        @Schema(description = "닉네임 중복 여부", example = "홍길동")
         @NotBlank
         Boolean isDuplicate
     ) {

@@ -1,5 +1,8 @@
 package io.devtab.popspot.global.exception;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +29,14 @@ public class ErrorResponse {
         return builder()
             .code(code)
             .message(message)
+            .build();
+    }
+
+    public static ErrorResponse failure(String code, String message, Object fieldErrors) {
+        return ErrorResponse.builder()
+            .code(code)
+            .message(message)
+            .fieldErrors(fieldErrors)
             .build();
     }
 }

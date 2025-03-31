@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
-import io.devtab.popspot.domain.jwt.forbidden.ForbiddenTokenService;
-import io.devtab.popspot.domain.jwt.refresh.RefreshTokenEntity;
-import io.devtab.popspot.domain.jwt.refresh.RefreshTokenService;
+import io.devtab.popspot.global.jwt.forbidden.ForbiddenTokenService;
+import io.devtab.popspot.global.jwt.refresh.RefreshTokenEntity;
+import io.devtab.popspot.global.jwt.refresh.RefreshTokenService;
 
 import io.devtab.popspot.domain.user.entity.User;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenClaim;

@@ -1,4 +1,4 @@
-package io.devtab.popspot.domain.jwt.refresh;
+package io.devtab.popspot.global.jwt.refresh;
 
 public interface RefreshTokenCustomRepository {
 

@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import io.devtab.popspot.domain.jwt.forbidden.ForbiddenTokenService;
+import io.devtab.popspot.global.jwt.forbidden.ForbiddenTokenService;
 import io.devtab.popspot.global.security.jwt.access.AccessTokenClaimKeys;
 import io.devtab.popspot.global.security.jwt.error.JwtErrorCode;
 import io.devtab.popspot.global.security.jwt.exception.JwtErrorException;
