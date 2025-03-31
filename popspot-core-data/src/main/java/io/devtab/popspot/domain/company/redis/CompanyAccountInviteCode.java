@@ -28,6 +28,7 @@ public class CompanyAccountInviteCode {
     private Integer companyId;
     private EmployeeAuthority authority;
     private LocalDateTime createdAt;
+    private LocalDateTime expiredAt;
 
     @TimeToLive
     private Long expiration;
@@ -38,6 +39,7 @@ public class CompanyAccountInviteCode {
             .companyId(companyId)
             .authority(authority)
             .createdAt(LocalDateTime.now())
+            .expiredAt(LocalDateTime.now().plusDays(1))
             .expiration(EXPIRE_SECOND)
             .build();
     }
